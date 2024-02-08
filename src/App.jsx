@@ -1,28 +1,47 @@
 import { useState } from "react";
 import "./App.css";
-import { HelloWorld } from "./HelloWorld/HelloWorld";
+import { HelloWorld } from "./components/HelloWorld";
+import { Counter } from "./components/Counter";
 
+// Als App bin ich auch eine Komponente
 function App() {
+  // Magic function 🦄, die in der App sein muss!
+  // Ansonsten weiß die App nicht, wo man diesen Wert ändern soll
+  // Render gefälligst neu
   const [counter, setCounter] = useState(0);
 
   function handleDecrease() {
-    return setCounter(counter - 1);
+    setCounter((prevCount) => {
+      if (prevCount > 0) {
+        setCounter((prevCount) => {
+          return prevCount - 1;
+        });
+      } else {
+        setCounter(0);
+      }
+    });
   }
+
   function handleIncrease() {
-    return setCounter(counter + 1);
+    setCounter((prevCount) => {
+      return prevCount + 1;
+    });
+  }
+
+  function handleReset() {
+    setCounter(0);
   }
 
   return (
-    (<HelloWorld />),
-    (
-      <counter>
-        <>
-          <p>{counter}</p>
-          <button onClick={handleDecrease}>-</button>
-          <button onClick={handleIncrease}>+</button>
-        </>
-      </counter>
-    )
+    <>
+      <HelloWorld />
+      <Counter
+        counter={counter}
+        onDecrease={handleDecrease}
+        onReset={handleReset}
+        onIncrease={handleIncrease}
+      />
+    </>
   );
 }
 
